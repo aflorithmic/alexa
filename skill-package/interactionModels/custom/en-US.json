@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "change me",
+      "invocationName": "aflr test",
       "intents": [
         {
           "name": "AMAZON.CancelIntent",

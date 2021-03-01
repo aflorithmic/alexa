@@ -9,7 +9,7 @@ const LaunchRequestHandler = {
   },
   handle(handlerInput) {
     console.log("testing testing logging");
-    const speakOutput = "Welcome, you can say Hello or Help. Which would you like to try?";
+    const speakOutput = "ZZZZZWelcome, you can say Hello or Help. Which would you like to try?";
     return handlerInput.responseBuilder.speak(speakOutput).reprompt(speakOutput).getResponse();
   }
 };
