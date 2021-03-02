@@ -16,6 +16,23 @@ const LaunchRequestHandler = {
     return handlerInput.responseBuilder.speak(message).reprompt(reprompt).getResponse();
   }
 };
+
+const CheckAudioInterfaceHandler = {
+  async canHandle(handlerInput) {
+    const audioPlayerInterface = (
+      (((handlerInput.requestEnvelope.context || {}).System || {}).device || {})
+        .supportedInterfaces || {}
+    ).AudioPlayer;
+    return audioPlayerInterface === undefined;
+  },
+  handle(handlerInput) {
+    return handlerInput.responseBuilder
+      .speak("Sorry, this skill is not supported on this device")
+      .withShouldEndSession(true)
+      .getResponse();
+  }
+};
+
 const HelpIntentHandler = {
   canHandle(handlerInput) {
     return (
@@ -29,6 +46,7 @@ const HelpIntentHandler = {
     return handlerInput.responseBuilder.speak(speakOutput).reprompt(speakOutput).getResponse();
   }
 };
+
 const CancelAndStopIntentHandler = {
   canHandle(handlerInput) {
     return (
@@ -43,15 +61,29 @@ const CancelAndStopIntentHandler = {
     return controller.stop(handlerInput, "Goodbye!");
   }
 };
+
+const SystemExceptionHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === "System.ExceptionEncountered";
+  },
+  handle(handlerInput) {
+    console.log("SystemExceptionHandler");
+    console.log(JSON.stringify(handlerInput.requestEnvelope, null, 2));
+    console.log(`System exception encountered: ${handlerInput.requestEnvelope.request.reason}`);
+  }
+};
+
 const SessionEndedRequestHandler = {
   canHandle(handlerInput) {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === "SessionEndedRequest";
   },
   handle(handlerInput) {
+    console.log("SessionEndedRequestHandler");
     // Any cleanup logic goes here.
     return handlerInput.responseBuilder.getResponse();
   }
 };
+
 const PlaySoundIntentHandler = {
   async canHandle(handlerInput) {
     return (
@@ -70,24 +102,14 @@ const PlaySoundIntentHandler = {
   }
 };
 
-// The intent reflector is used for interaction model testing and debugging.
-// It will simply repeat the intent the user said. You can create custom handlers
-// for your intents by defining them above, then also adding them to the request
-// handler chain below.
-const IntentReflectorHandler = {
+const SessionEndedRequestHandler = {
   canHandle(handlerInput) {
-    return Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest";
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === "SessionEndedRequest";
   },
   handle(handlerInput) {
-    const intentName = Alexa.getIntentName(handlerInput.requestEnvelope);
-    const speakOutput = `You just triggered ${intentName}`;
-
-    return (
-      handlerInput.responseBuilder
-        .speak(speakOutput)
-        //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-        .getResponse()
-    );
+    console.log("SessionEndedRequestHandler");
+    // Any cleanup logic goes here.
+    return handlerInput.responseBuilder.getResponse();
   }
 };
 
@@ -95,18 +117,53 @@ const IntentReflectorHandler = {
 // stating the request handler chain is not found, you have not implemented a handler for
 // the intent being invoked or included it in the skill builder below.
 const ErrorHandler = {
-  canHandle() {
+  canHandle(handlerInput) {
+    console.log(handlerInput.requestEnvelope.request.type);
     return true;
   },
   handle(handlerInput, error) {
-    console.log(`~~~~ Error handled: ${error.stack}`);
-    const speakOutput = `Sorry, I had trouble doing what you asked. Please try again.`;
+    console.log("ErrorHandler");
+    console.log(error);
+    console.log(`Error handled: ${error.message}`);
+    const message = "Sorry, this is not a valid command. Please say help to hear what you can say.";
 
-    return handlerInput.responseBuilder.speak(speakOutput).reprompt(speakOutput).getResponse();
+    return handlerInput.responseBuilder.speak(message).reprompt(message).getResponse();
   }
 };
 
 // Helpers
+
+/**
+ * Handle Audio Player Events
+ */
+const AudioPlayerEventHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type.startsWith("AudioPlayer.");
+  },
+  async handle(handlerInput) {
+    const { requestEnvelope, responseBuilder } = handlerInput;
+    const audioPlayerEventName = requestEnvelope.request.type.split(".")[1];
+
+    console.log("AudioPlayerEventHandler");
+    console.log(audioPlayerEventName);
+    switch (audioPlayerEventName) {
+      case "PlaybackStarted":
+        break;
+      case "PlaybackFinished":
+        break;
+      case "PlaybackStopped":
+        break;
+      case "PlaybackNearlyFinished":
+        break;
+      case "PlaybackFailed":
+        break;
+      default:
+        throw new Error("Should never reach here!");
+    }
+
+    return responseBuilder.getResponse();
+  }
+};
 
 const controller = {
   async play(handlerInput, query) {
@@ -130,12 +187,14 @@ const controller = {
 // defined are included below. The order matters - they're processed top to bottom.
 exports.handler = Alexa.SkillBuilders.custom()
   .addRequestHandlers(
+    CheckAudioInterfaceHandler,
     LaunchRequestHandler,
-    PlaySoundIntentHandler,
+    GetVideoIntentHandler,
+    SystemExceptionHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     SessionEndedRequestHandler,
-    IntentReflectorHandler // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
+    AudioPlayerEventHandler
   )
   .addErrorHandlers(ErrorHandler)
   .lambda();

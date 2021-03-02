@@ -20,7 +20,7 @@
           "slots": [
             {
               "name": "nameQuery",
-              "type": "AUDIO"
+              "type": "AMAZON.FirstName"
             }
           ],
           "samples": [
@@ -48,7 +48,7 @@
           "slots": [
             {
               "name": "nameQuery",
-              "type": "AUDIO"
+              "type": "AMAZON.FirstName"
             }
           ],
           "samples": [
