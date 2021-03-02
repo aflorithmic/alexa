@@ -1,4 +1,4 @@
-# Aflorithmic Alexa Integration
+# Aflorithmic Alexa Integration
 
 `ask init`
 
