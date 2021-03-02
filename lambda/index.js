@@ -8,8 +8,7 @@ const LaunchRequestHandler = {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === "LaunchRequest";
   },
   handle(handlerInput) {
-    console.log("testing testing logging");
-    const speakOutput = "ZZZZZWelcome, you can say Hello or Help. Which would you like to try?";
+    const speakOutput = "Welcome, you can say Hello or Help. Which would you like to try?";
     return handlerInput.responseBuilder.speak(speakOutput).reprompt(speakOutput).getResponse();
   }
 };
@@ -21,13 +20,12 @@ const HelloWorldIntentHandler = {
     );
   },
   handle(handlerInput) {
-    const speakOutput = "Hello World!";
-    return (
-      handlerInput.responseBuilder
-        .speak(speakOutput)
-        //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-        .getResponse()
-    );
+    console.log("123123123", handlerInput.requestEnvelope);
+    const speakOutput = "Hello World!!! Testing";
+    return handlerInput.responseBuilder
+      .speak(speakOutput)
+      .reprompt("add a reprompt if you want to keep the session open for the user to respond")
+      .getResponse();
   }
 };
 const HelpIntentHandler = {
