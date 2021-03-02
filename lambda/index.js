@@ -178,7 +178,7 @@ exports.handler = Alexa.SkillBuilders.custom()
   .addRequestHandlers(
     CheckAudioInterfaceHandler,
     LaunchRequestHandler,
-    GetVideoIntentHandler,
+    PlaySoundIntentHandler,
     SystemExceptionHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
