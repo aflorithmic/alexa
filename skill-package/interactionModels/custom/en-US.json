@@ -25,6 +25,7 @@
           ],
           "samples": [
             "search for {nameQuery}",
+            "play audio for {nameQuery}",
             "find {nameQuery}",
             "play {nameQuery}",
             "start playing {nameQuery}",

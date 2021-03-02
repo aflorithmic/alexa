@@ -1,9 +1,9 @@
 const { default: axios } = require("axios");
 
-const ORGANIZATION = "aflr";
-const MODULE = "baobub";
-const PROJECT = "handshake";
-const SCRIPT = "handshake";
+const ORGANIZATION = "aflorithmic";
+const PROJECT = "baobub";
+const MODULE = "handshake";
+const SCRIPT = "handshake_01";
 
 const HANDSHAKE_ENDPOINT = "https://handshake.aflr.io";
 
@@ -19,7 +19,7 @@ module.exports.getHandshakeResult = async function (username) {
       }
     });
     const { handshakeTrack } = data;
-    console.log("🚀 ~ handshakeTrack", handshakeTrack)
+    console.log("🚀 ~ handshakeTrack", handshakeTrack);
     return handshakeTrack;
   } catch (ex) {
     console.log(ex);
