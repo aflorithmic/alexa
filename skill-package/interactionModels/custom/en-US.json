@@ -4,18 +4,6 @@
       "invocationName": "aflr test",
       "intents": [
         {
-          "name": "AMAZON.CancelIntent",
-          "samples": []
-        },
-        {
-          "name": "AMAZON.HelpIntent",
-          "samples": []
-        },
-        {
-          "name": "AMAZON.StopIntent",
-          "samples": []
-        },
-        {
           "name": "HelloWorldIntent",
           "slots": [],
           "samples": [
@@ -27,10 +15,6 @@
             "say hello world",
             "say hello"
           ]
-        },
-        {
-          "name": "AMAZON.NavigateHomeIntent",
-          "samples": []
         }
       ],
       "types": []
