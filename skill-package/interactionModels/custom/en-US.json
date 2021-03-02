@@ -4,17 +4,56 @@
       "invocationName": "aflr test",
       "intents": [
         {
-          "name": "HelloWorldIntent",
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "PlayAudio",
           "slots": [],
           "samples": [
-            "hello",
-            "how are you",
-            "say hi world",
-            "say hi",
-            "hi",
-            "say hello world",
-            "say hello"
+            "begin podcast",
+            "begin the podcast",
+            "begin playing the podcast",
+            "start podcast",
+            "start the podcast",
+            "start playing the podcast",
+            "play the podcast",
+            "to play",
+            "to begin podcast",
+            "to begin the podcast",
+            "to begin playing the podcast",
+            "to start podcast",
+            "to start the podcast",
+            "to start playing the podcast",
+            "to play the podcast"
           ]
+        },
+        {
+          "name": "AMAZON.PauseIntent",
+          "slots": [],
+          "samples": []
+        },
+        {
+          "name": "AMAZON.ResumeIntent",
+          "slots": [],
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StartOverIntent",
+          "slots": [],
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
         }
       ],
       "types": []
