@@ -2,29 +2,18 @@
 // Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
 // session persistence, api calls, and more.
 const Alexa = require("ask-sdk-core");
+const { getHandshakeResult } = require("./util");
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
-    return handlerInput.requestEnvelope.request.type === "LaunchRequest";
-  },
-  async handle(handlerInput) {
-    let message;
-    let reprompt;
-
-    message = "Welcome to the AWS Podcast. you can ask to play the audio to begin the podcast.";
-    reprompt = "You can say, play the audio, to begin.";
-    return handlerInput.responseBuilder.speak(message).reprompt(reprompt).getResponse();
-  }
-};
-
-const StartPlaybackHandler = {
-  async canHandle(handlerInput) {
-    const request = handlerInput.requestEnvelope.request;
-    return request.type === "IntentRequest" && request.intent.name === "PlayAudio";
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === "LaunchRequest";
   },
   handle(handlerInput) {
-    console.log("cameee")
-    return controller.play(handlerInput);
+    console.log("LaunchRequestHandler");
+    const message =
+      "Welcome to Aflorithmic. Ask to play a sound with your name to start listening.";
+    const reprompt = "You can say, play Alex, to begin.";
+    return handlerInput.responseBuilder.speak(message).reprompt(reprompt).getResponse();
   }
 };
 const HelpIntentHandler = {
@@ -45,39 +34,42 @@ const CancelAndStopIntentHandler = {
     return (
       Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest" &&
       (Alexa.getIntentName(handlerInput.requestEnvelope) === "AMAZON.CancelIntent" ||
-        Alexa.getIntentName(handlerInput.requestEnvelope) === "AMAZON.StopIntent")
+        Alexa.getIntentName(handlerInput.requestEnvelope) === "AMAZON.StopIntent" ||
+        Alexa.getIntentName(handlerInput.requestEnvelope) === "AMAZON.PauseIntent")
     );
   },
   handle(handlerInput) {
-    const speakOutput = "Goodbye!";
-    return handlerInput.responseBuilder.speak(speakOutput).getResponse();
+    console.log("CancelAndStopIntentHandler");
+    return controller.stop(handlerInput, "Goodbye!");
   }
 };
 const SessionEndedRequestHandler = {
   canHandle(handlerInput) {
-    return handlerInput.requestEnvelope.request.type === "SessionEndedRequest";
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === "SessionEndedRequest";
   },
   handle(handlerInput) {
-    console.log(`Session ended with reason: ${handlerInput.requestEnvelope.request.reason}`);
-
+    // Any cleanup logic goes here.
     return handlerInput.responseBuilder.getResponse();
   }
 };
-const CheckAudioInterfaceHandler = {
+const PlaySoundIntentHandler = {
   async canHandle(handlerInput) {
-    const audioPlayerInterface = (
-      (((handlerInput.requestEnvelope.context || {}).System || {}).device || {})
-        .supportedInterfaces || {}
-    ).AudioPlayer;
-    return audioPlayerInterface === undefined;
+    return (
+      Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest" &&
+      Alexa.getIntentName(handlerInput.requestEnvelope) === "PlaySoundIntent"
+    );
   },
   handle(handlerInput) {
-    return handlerInput.responseBuilder
-      .speak("Sorry, this skill is not supported on this device")
-      .withShouldEndSession(true)
-      .getResponse();
+    console.log("PlaySound");
+    const speechText = handlerInput.requestEnvelope.request.intent.slots.nameQuery.value;
+    if (speechText) {
+      return controller.play(handlerInput, speechText);
+    } else {
+      return handlerInput.responseBuilder.speak("You can say, play alex, to begin.").getResponse();
+    }
   }
 };
+
 // The intent reflector is used for interaction model testing and debugging.
 // It will simply repeat the intent the user said. You can create custom handlers
 // for your intents by defining them above, then also adding them to the request
@@ -114,82 +106,22 @@ const ErrorHandler = {
   }
 };
 
-/* HELPER FUNCTIONS */
+// Helpers
 
 const controller = {
-  async play(handlerInput) {
-    const { attributesManager, responseBuilder } = handlerInput;
-
-    const playbackInfo = await getPlaybackInfo(handlerInput);
-    const { playOrder, offsetInMilliseconds, index } = playbackInfo;
-
+  async play(handlerInput, query) {
+    const url = await getHandshakeResult(query);
+    const { responseBuilder } = handlerInput;
     const playBehavior = "REPLACE_ALL";
-    const podcast =
-      "https://assetstore.aflr.io/aflorithmic/libriopilot/eichhornpilot/animalsstorygerman__username~sarah.mp3";
-    const token = playOrder[index];
-    playbackInfo.nextStreamEnqueued = false;
-
+    console.log("play");
     responseBuilder
-      .speak(`This is ${podcast.title}`)
+      .speak(`Playing Baobub for ${query}`)
       .withShouldEndSession(true)
-      .addAudioPlayerPlayDirective(playBehavior, podcast.url, token, offsetInMilliseconds, null);
-
-    if (await canThrowCard(handlerInput)) {
-      const cardTitle = `Playing ${podcast.title}`;
-      const cardContent = `Playing ${podcast.title}`;
-      responseBuilder.withSimpleCard(cardTitle, cardContent);
-    }
-
+      .addAudioPlayerPlayDirective(playBehavior, url, url, 0, null);
     return responseBuilder.getResponse();
   },
-  stop(handlerInput) {
-    return handlerInput.responseBuilder.addAudioPlayerStopDirective().getResponse();
-  },
-  async playNext(handlerInput) {
-    const {
-      playbackInfo,
-      playbackSetting
-    } = await handlerInput.attributesManager.getPersistentAttributes();
-
-    const nextIndex = (playbackInfo.index + 1) % constants.audioData.length;
-
-    if (nextIndex === 0 && !playbackSetting.loop) {
-      return handlerInput.responseBuilder
-        .speak("You have reached the end of the playlist")
-        .addAudioPlayerStopDirective()
-        .getResponse();
-    }
-
-    playbackInfo.index = nextIndex;
-    playbackInfo.offsetInMilliseconds = 0;
-    playbackInfo.playbackIndexChanged = true;
-
-    return this.play(handlerInput);
-  },
-  async playPrevious(handlerInput) {
-    const {
-      playbackInfo,
-      playbackSetting
-    } = await handlerInput.attributesManager.getPersistentAttributes();
-
-    let previousIndex = playbackInfo.index - 1;
-
-    if (previousIndex === -1) {
-      if (playbackSetting.loop) {
-        previousIndex += constants.audioData.length;
-      } else {
-        return handlerInput.responseBuilder
-          .speak("You have reached the start of the playlist")
-          .addAudioPlayerStopDirective()
-          .getResponse();
-      }
-    }
-
-    playbackInfo.index = previousIndex;
-    playbackInfo.offsetInMilliseconds = 0;
-    playbackInfo.playbackIndexChanged = true;
-
-    return this.play(handlerInput);
+  async stop(handlerInput, message) {
+    return handlerInput.responseBuilder.speak(message).addAudioPlayerStopDirective().getResponse();
   }
 };
 
@@ -198,9 +130,8 @@ const controller = {
 // defined are included below. The order matters - they're processed top to bottom.
 exports.handler = Alexa.SkillBuilders.custom()
   .addRequestHandlers(
-    //CheckAudioInterfaceHandler,
     LaunchRequestHandler,
-    StartPlaybackHandler,
+    PlaySoundIntentHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     SessionEndedRequestHandler,

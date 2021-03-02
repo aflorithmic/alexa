@@ -1,19 +1,25 @@
-const AWS = require('aws-sdk');
+const { default: axios } = require("axios");
 
-const s3SigV4Client = new AWS.S3({
-    signatureVersion: 'v4',
-    region: process.env.S3_PERSISTENCE_REGION
-});
+const organization = "aflr";
+const module = "baobub";
+const project = "handshake";
+const script = "handshake";
 
-module.exports.getS3PreSignedUrl = function getS3PreSignedUrl(s3ObjectKey) {
+const HANDSHAKE_ENDPOINT = "https://handshake.aflr.io";
 
-    const bucketName = process.env.S3_PERSISTENCE_BUCKET;
-    const s3PreSignedUrl = s3SigV4Client.getSignedUrl('getObject', {
-        Bucket: bucketName,
-        Key: s3ObjectKey,
-        Expires: 60*1 // the Expires is capped for 1 minute
+module.exports.getHandshakeResult = async function (username) {
+  try {
+    const { data } = await axios.get(HANDSHAKE_ENDPOINT, {
+      username,
+      module,
+      script,
+      organization,
+      project
     });
-    console.log(`Util.s3PreSignedUrl: ${s3ObjectKey} URL ${s3PreSignedUrl}`);
-    return s3PreSignedUrl;
-
-}
+    const { handshakeTrack } = data;
+    return handshakeTrack;
+  } catch (ex) {
+    console.log(ex);
+    throw ex;
+  }
+};

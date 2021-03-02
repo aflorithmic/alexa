@@ -16,24 +16,19 @@
           "samples": []
         },
         {
-          "name": "PlayAudio",
-          "slots": [],
+          "name": "PlaySoundIntent",
+          "slots": [
+            {
+              "name": "nameQuery",
+              "type": "AUDIO"
+            }
+          ],
           "samples": [
-            "begin podcast",
-            "begin the podcast",
-            "begin playing the podcast",
-            "start podcast",
-            "start the podcast",
-            "start playing the podcast",
-            "play the podcast",
-            "to play",
-            "to begin podcast",
-            "to begin the podcast",
-            "to begin playing the podcast",
-            "to start podcast",
-            "to start the podcast",
-            "to start playing the podcast",
-            "to play the podcast"
+            "search for {nameQuery}",
+            "find {nameQuery}",
+            "play {nameQuery}",
+            "start playing {nameQuery}",
+            "put on {nameQuery}"
           ]
         },
         {
@@ -45,18 +40,26 @@
           "name": "AMAZON.ResumeIntent",
           "slots": [],
           "samples": []
-        },
-        {
-          "name": "AMAZON.StartOverIntent",
-          "slots": [],
-          "samples": []
-        },
-        {
-          "name": "AMAZON.NavigateHomeIntent",
-          "samples": []
         }
       ],
-      "types": []
+      "types": [
+        {
+          "name": "PlaySoundIntent",
+          "slots": [
+            {
+              "name": "nameQuery",
+              "type": "AUDIO"
+            }
+          ],
+          "samples": [
+            "search for {nameQuery}",
+            "find {nameQuery}",
+            "play {nameQuery}",
+            "start playing {nameQuery}",
+            "put on {nameQuery}"
+          ]
+        }
+      ]
     }
   },
   "version": "1"
