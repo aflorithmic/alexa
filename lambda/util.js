@@ -17,6 +17,7 @@ module.exports.getHandshakeResult = async function (username) {
       project
     });
     const { handshakeTrack } = data;
+    console.log("🚀 ~ file: util.js ~ line 20 ~ handshakeTrack", handshakeTrack)
     return handshakeTrack;
   } catch (ex) {
     console.log(ex);
