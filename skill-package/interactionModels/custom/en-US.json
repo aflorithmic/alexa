@@ -42,24 +42,7 @@
           "samples": []
         }
       ],
-      "types": [
-        {
-          "name": "PlaySoundIntent",
-          "slots": [
-            {
-              "name": "nameQuery",
-              "type": "AMAZON.FirstName"
-            }
-          ],
-          "samples": [
-            "search for {nameQuery}",
-            "find {nameQuery}",
-            "play {nameQuery}",
-            "start playing {nameQuery}",
-            "put on {nameQuery}"
-          ]
-        }
-      ]
+      "types": []
     }
   },
   "version": "1"
