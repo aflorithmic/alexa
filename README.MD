@@ -1,7 +1,13 @@
 # Aflorithmic Alexa Integration
 
-`ask init`
+Clone the repository
 
-`ask run`
+`(cd lambda/ && npm install)`: install the dependencies first
 
-`ask dialog`
+`ask init`: say yes when asked to override, then say yes to everything
+
+`ask deploy`: you need to configure your profile before running this
+
+`ask run`: to test the skill
+
+`ask dialog`: in a new terminal tab along with "ask run"
