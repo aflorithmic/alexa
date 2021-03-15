@@ -7,7 +7,7 @@ const SCRIPT = "handshake_01";
 
 const HANDSHAKE_ENDPOINT = "https://handshake.aflr.io";
 
-module.exports.getHandshakeResult = async function (username) {
+module.exports.getHandshakeResult = async function (username = "") {
   try {
     const { data } = await axios.get(HANDSHAKE_ENDPOINT, {
       params: {
