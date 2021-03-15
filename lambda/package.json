@@ -1,12 +1,12 @@
 {
-  "name": "hello-world",
-  "version": "1.1.0",
-  "description": "alexa utility for quickly building skills",
+  "name": "aflr-test",
+  "version": "1.0.0",
+  "description": "aflr alexa utility for quickly building skills",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Amazon Alexa",
+  "author": "salih",
   "license": "ISC",
   "dependencies": {
     "ask-sdk-core": "^2.6.0",

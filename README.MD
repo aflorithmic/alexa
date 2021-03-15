@@ -2,7 +2,7 @@
 
 Clone the repository
 
-`(cd lambda/ && npm install)`: install the dependencies first
+`(cd lambda/ && npm install)`: _including the parentheses_ install the dependencies first 
 
 `ask init`: say yes when asked to override, then say yes to everything
 
