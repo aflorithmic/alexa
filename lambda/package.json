@@ -1,5 +1,5 @@
 {
-  "name": "aflr-test",
+  "name": "api-audio-maker",
   "version": "1.0.0",
   "description": "aflr alexa utility for quickly building skills",
   "main": "index.js",
@@ -9,6 +9,7 @@
   "author": "salih",
   "license": "ISC",
   "dependencies": {
+    "apiaudio": "^0.5.3",
     "ask-sdk-core": "^2.6.0",
     "ask-sdk-model": "^1.18.0",
     "aws-sdk": "^2.326.0",

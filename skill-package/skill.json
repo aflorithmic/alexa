@@ -12,8 +12,8 @@
     "publishingInformation": {
       "locales": {
         "en-US": {
-          "name": "aflr-test",
-          "description": "aflorithmic alexa integration"
+          "name": "api audio maker",
+          "description": "api audio alexa integration"
         }
       },
       "category": "STREAMING_SERVICE"

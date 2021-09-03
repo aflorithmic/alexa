@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "aflr test",
+      "invocationName": "api audio maker",
       "intents": [
         {
           "name": "AMAZON.CancelIntent",

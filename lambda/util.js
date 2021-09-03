@@ -1,26 +1,23 @@
 const { default: axios } = require("axios");
+const apiaudio = require("apiaudio").default
+// fill with your apiKey and your scriptId.
+// for production version, please don't hardcode your keys.
+apiaudio.configure({ apiKey: "your apikey here"});
+const SCRIPT_ID = "your scriptid here"
 
-const ORGANIZATION = "aflorithmic";
-const PROJECT = "baobub";
-const MODULE = "handshake";
-const SCRIPT = "handshake_01";
-
-const HANDSHAKE_ENDPOINT = "https://handshake.aflr.io";
-
-module.exports.getHandshakeResult = async function (username = "") {
+module.exports.getApiAudio= async function (username = "") {
   try {
-    const { data } = await axios.get(HANDSHAKE_ENDPOINT, {
-      params: {
-        username,
-        module: MODULE,
-        script: SCRIPT,
-        organization: ORGANIZATION,
-        project: PROJECT
-      }
-    });
-    const { handshakeTrack } = data;
-    console.log("🚀 ~ handshakeTrack", handshakeTrack);
-    return handshakeTrack;
+    // produce text to speech
+    const speechRequest = await apiaudio.Speech.create({ scriptId: SCRIPT_ID, voice: "en-GB-RyanNeural", audience:[{"username": username}]});
+    
+    // do mastering on the speech audio files using a soundTemplate.
+    const masteringRequest = await apiaudio.Mastering.create({scriptId: SCRIPT_ID, public: true, soundTemplate: "headlines", audience:[{"username": username}]});
+    
+    // retrieve mastered audio file url
+    const masteringResult = await apiaudio.Mastering.retrieve(SCRIPT_ID, {"username": username}, _public=true);
+    const audioUrl = masteringResult.url
+    console.log("~ mastering result", audioUrl);
+    return audioUrl;
   } catch (ex) {
     console.log(ex);
     throw ex;

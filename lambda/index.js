@@ -1,8 +1,5 @@
-// This sample demonstrates handling intents from an Alexa skill using the Alexa Skills Kit SDK (v2).
-// Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
-// session persistence, api calls, and more.
 const Alexa = require("ask-sdk-core");
-const { getHandshakeResult } = require("./util");
+const { getApiAudio } = require("./util");
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -11,7 +8,7 @@ const LaunchRequestHandler = {
   handle(handlerInput) {
     console.log("LaunchRequestHandler");
     const message =
-      "Welcome to Aflorithmic. Ask to play a sound with your name to start listening.";
+      "Welcome to api audio news maker. Just say play and your name to begin. For example, say, play Alex.";
     const reprompt = "You can say, play Alex, to begin.";
     return handlerInput.responseBuilder.speak(message).reprompt(reprompt).getResponse();
   }
@@ -156,12 +153,12 @@ const AudioPlayerEventHandler = {
 
 const controller = {
   async play(handlerInput, query) {
-    const url = await getHandshakeResult(query);
+    const url = await getApiAudio(query);
     const { responseBuilder } = handlerInput;
     const playBehavior = "REPLACE_ALL";
     console.log("play");
     responseBuilder
-      .speak(`Playing Baobub for ${query}`)
+      .speak(`Playing news for ${query}`)
       .withShouldEndSession(true)
       .addAudioPlayerPlayDirective(playBehavior, url, url, 0, null);
     return responseBuilder.getResponse();
