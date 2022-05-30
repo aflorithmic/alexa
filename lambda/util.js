@@ -17,7 +17,7 @@ module.exports.getApiAudio = async function(username = "") {
         const masteringResult = await apiaudio.Mastering.retrieve(SCRIPT_ID, { "username": username }, _public = true);
         const audioUrl = masteringResult.url
         console.log("~ mastering result", audioUrl);
-        return audioUrl;
+        return "https://v1.api.audio/url/0a65c9/multiple_speakers.mp3";
     } catch (ex) {
         console.log(ex);
         throw ex;
