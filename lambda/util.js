@@ -7,16 +7,16 @@ const SCRIPT_ID = "your scriptid here"
 
 module.exports.getApiAudio = async function(username = "") {
     try {
-        // produce text to speech
-        const speechRequest = await apiaudio.Speech.create({ scriptId: SCRIPT_ID, voice: "en-GB-RyanNeural", audience: [{ "username": username }] });
+        // // produce text to speech
+        // const speechRequest = await apiaudio.Speech.create({ scriptId: SCRIPT_ID, voice: "en-GB-RyanNeural", audience: [{ "username": username }] });
 
-        // do mastering on the speech audio files using a soundTemplate.
-        const masteringRequest = await apiaudio.Mastering.create({ scriptId: SCRIPT_ID, public: true, soundTemplate: "headlines", audience: [{ "username": username }] });
+        // // do mastering on the speech audio files using a soundTemplate.
+        // const masteringRequest = await apiaudio.Mastering.create({ scriptId: SCRIPT_ID, public: true, soundTemplate: "headlines", audience: [{ "username": username }] });
 
-        // retrieve mastered audio file url
-        const masteringResult = await apiaudio.Mastering.retrieve(SCRIPT_ID, { "username": username }, _public = true);
-        const audioUrl = masteringResult.url
-        console.log("~ mastering result", audioUrl);
+        // // retrieve mastered audio file url
+        // const masteringResult = await apiaudio.Mastering.retrieve(SCRIPT_ID, { "username": username }, _public = true);
+        // const audioUrl = masteringResult.url
+        // console.log("~ mastering result", audioUrl);
         return "https://v1.api.audio/url/0a65c9/multiple_speakers.mp3";
     } catch (ex) {
         console.log(ex);
