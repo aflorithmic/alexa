@@ -1,5 +1,5 @@
 {
-  "name": "api-audio-maker",
+  "name": "aflr-test",
   "version": "1.0.0",
   "description": "aflr alexa utility for quickly building skills",
   "main": "index.js",
@@ -9,8 +9,11 @@
   "author": "salih",
   "license": "ISC",
   "dependencies": {
+<<<<<<< HEAD
     "apiaudio": "^0.5.3",
     "ask": "^1.5.0",
+=======
+>>>>>>> parent of e94fd01 (new version of alexa skill with apiaudio support)
     "ask-sdk-core": "^2.6.0",
     "ask-sdk-model": "^1.18.0",
     "aws-sdk": "^2.326.0",

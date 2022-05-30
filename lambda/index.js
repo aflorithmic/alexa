@@ -1,7 +1,11 @@
+// This sample demonstrates handling intents from an Alexa skill using the Alexa Skills Kit SDK (v2).
+// Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
+// session persistence, api calls, and more.
 const Alexa = require("ask-sdk-core");
-const { getApiAudio } = require("./util");
+const { getHandshakeResult } = require("./util");
 
 const LaunchRequestHandler = {
+<<<<<<< HEAD
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === "LaunchRequest";
     },
@@ -12,6 +16,18 @@ const LaunchRequestHandler = {
         const reprompt = "You can say, play Alex, to begin.";
         return handlerInput.responseBuilder.speak(message).reprompt(reprompt).getResponse();
     }
+=======
+  canHandle(handlerInput) {
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === "LaunchRequest";
+  },
+  handle(handlerInput) {
+    console.log("LaunchRequestHandler");
+    const message =
+      "Welcome to Aflorithmic. Ask to play a sound with your name to start listening.";
+    const reprompt = "You can say, play Alex, to begin.";
+    return handlerInput.responseBuilder.speak(message).reprompt(reprompt).getResponse();
+  }
+>>>>>>> parent of e94fd01 (new version of alexa skill with apiaudio support)
 };
 
 const CheckAudioInterfaceHandler = {
@@ -144,6 +160,7 @@ const AudioPlayerEventHandler = {
 };
 
 const controller = {
+<<<<<<< HEAD
     async play(handlerInput, query) {
         const url = await getApiAudio(query);
         const { responseBuilder } = handlerInput;
@@ -159,6 +176,22 @@ const controller = {
     async stop(handlerInput, message) {
         return handlerInput.responseBuilder.speak(message).addAudioPlayerStopDirective().getResponse();
     }
+=======
+  async play(handlerInput, query) {
+    const url = await getHandshakeResult(query);
+    const { responseBuilder } = handlerInput;
+    const playBehavior = "REPLACE_ALL";
+    console.log("play");
+    responseBuilder
+      .speak(`Playing Baobub for ${query}`)
+      .withShouldEndSession(true)
+      .addAudioPlayerPlayDirective(playBehavior, url, url, 0, null);
+    return responseBuilder.getResponse();
+  },
+  async stop(handlerInput, message) {
+    return handlerInput.responseBuilder.speak(message).addAudioPlayerStopDirective().getResponse();
+  }
+>>>>>>> parent of e94fd01 (new version of alexa skill with apiaudio support)
 };
 
 // The SkillBuilder acts as the entry point for your skill, routing all request and response
